@@ -1,0 +1,30 @@
+---
+- name: Create Traefik directories
+  block:
+    - name: Create directories for Docker Compose
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - "{{ traefik_data_directory }}/traefik"
+
+    - name: Create traefik.toml
+      ansible.builtin.template:
+        src: traefik.toml.j2
+        dest: "{{ traefik_data_directory }}/traefik/traefik.toml"
+
+    - name: Create docker-compose.yml
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ traefik_data_directory }}/docker-compose.yml"
+
+    - name: Create acme.json
+      ansible.builtin.copy:
+        content: ""
+        force: false
+        mode: "0600"
+        dest: "{{ traefik_data_directory }}/traefik/acme.json"
+
+    - name: Start Traefik
+      community.docker.docker_compose:
+        project_src: "{{ traefik_data_directory }}"

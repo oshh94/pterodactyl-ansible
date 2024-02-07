@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+
+  wings:
+    image: ghcr.io/pterodactyl/wings:{{ wings_version }}
+    restart: always
+    networks:
+      - pterodactyl
+      - wings0
+    ports:
+      - "{{ wings_ssh_port }}:2022"
+    tty: true
+    environment:
+      TZ: "UTC"
+      WINGS_UID: 988
+      WINGS_GID: 988
+      WINGS_USERNAME: pterodactyl
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/lib/docker/containers/:/var/lib/docker/containers/"
+      - "/tmp/pterodactyl/:/tmp/pterodactyl/"
+      - "/etc/ssl/certs:/etc/ssl/certs:ro"
+      - "{{ wings_data_dir }}/wings/etc/:/etc/pterodactyl/"
+      - "{{ wings_data_dir }}/wings/logs:/var/log/pterodactyl/"
+      - "{{ wings_data_full_path }}:{{ wings_data_full_path }}"
+    labels:
+      # HTTP
+      - "traefik.http.routers.pterodactyl_wings.entrypoints=web"
+      - "traefik.http.routers.pterodactyl_wings.rule=Host(`{{ inventory_hostname }}`)"
+      - "traefik.http.routers.pterodactyl_wings.middlewares=wings_https"
+      - "traefik.http.middlewares.wings_https.redirectscheme.scheme=https"
+      # HTTPS
+      - "traefik.enable=true"
+      - "traefik.docker.network=pterodactyl"
+      - "traefik.http.routers.pterodactyl_wings-https.entrypoints=websecure"
+      - "traefik.http.routers.pterodactyl_wings-https.rule=Host(`{{ inventory_hostname }}`)"
+      - "traefik.http.routers.pterodactyl_wings-https.tls=true"
+      - "traefik.http.routers.pterodactyl_wings-https.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pterodactyl_wings-https.loadbalancer.server.port=443"
+
+networks:
+  pterodactyl:
+    external: true
+  wings0:
+    name: wings0
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.21.0.0/16"
+    driver_opts:
+      com.docker.network.bridge.name: wings0

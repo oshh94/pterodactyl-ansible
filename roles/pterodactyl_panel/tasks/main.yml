@@ -1,0 +1,25 @@
+---
+- name: Start Pterodactyl Panel
+  block:
+    - name: Create directories for Docker Compose
+      become: true
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: 1000 # TODO use the orginal user ID running ansible.
+        group: 1000 
+
+      with_items:
+        - "{{ pterodactyl_panel_data_dir }}/database"
+        - "{{ pterodactyl_panel_data_dir }}/panel/var"
+        - "{{ pterodactyl_panel_data_dir }}/panel/logs"
+        - "{{ pterodactyl_panel_data_dir }}/panel/nginx"
+
+    - name: Create docker-compose.yml
+      ansible.builtin.template:
+        src: docker-compose.yml.j2
+        dest: "{{ pterodactyl_panel_data_dir }}/docker-compose.yml"
+
+    - name: Start pterodactyl
+      docker_compose:
+        project_src: "{{ pterodactyl_panel_data_dir }}"

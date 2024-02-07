@@ -1,0 +1,16 @@
+pterodactyl_panel_data_dir: "{{ docker_home }}/pterodactyl_panel"
+pterodactyl_panel_domain: "{{ ansible_host }}"
+# A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
+pterodactyl_panel_timezone: "UTC"
+pterodactyl_panel_author_email: "nobody@example.com"
+pterodactyl_panel_hashids_salt: "CHANGEMEPLS123456789"
+pterodactyl_panel_mysql_root_password: "supersafepassword"
+pterodactyl_panel_mysql_password: "anothersupersafepassword"
+
+pterodactyl_panel_mail_from: "noreply@example.com"
+pterodactyl_panel_mail_driver: "smtp"
+pterodactyl_panel_mail_host: "mail"
+pterodactyl_panel_mail_port: "1025"
+pterodactyl_panel_mail_username: ""
+pterodactyl_panel_mail_password: ""
+pterodactyl_panel_mail_encryption: "true"

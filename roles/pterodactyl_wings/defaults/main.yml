@@ -1,0 +1,5 @@
+wings_version: "latest"
+wings_doman: "192.168.56.4"
+wings_data_dir: "{{ docker_home }}/pterodactyl_wings"
+wings_data_full_path: "/var/lib/pterodactyl/"
+wings_ssh_port: 2022

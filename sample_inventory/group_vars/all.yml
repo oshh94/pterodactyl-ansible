@@ -1,0 +1,8 @@
+traefik_domain: example.com
+traefik_cf_api_token: Cloudflare-token
+traefik_email: me@example.com
+docker_home: /home/me/docker
+pterodactyl_panel_domain: "panel.example.com"
+pterodactyl_panel_mysql_root_password: "supersafepassword"
+pterodactyl_panel_mysql_password: "anothersupersafepassword"
+pterodactyl_panel_hashids_salt: "CHANGEMEPLS123456789"

@@ -1,0 +1,18 @@
+---
+- name: Common
+  hosts: all
+  roles:
+    - role: common
+    - role: traefik
+
+- name: Install Panel 
+  hosts: panel
+
+  roles:
+    - role: pterodactyl_panel
+
+- name: Install wings
+  hosts: gameserver
+
+  roles:
+    - role: pterodactyl_wings
